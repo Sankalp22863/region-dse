@@ -91,6 +91,27 @@ body{
   will-change:transform;
 }
 
+/* ---------- day / night toggle ---------- */
+#theme{
+  position:fixed; top:16px; right:18px; z-index:61;
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:Mono,ui-monospace,monospace; font-size:10.5px;
+  letter-spacing:.14em; text-transform:uppercase;
+  color:var(--muted); background:var(--surface);
+  border:1px solid var(--rule); border-radius:3px;
+  padding:7px 11px; cursor:pointer;
+  transition:color .2s ease, border-color .2s ease, background-color .2s ease;
+}
+#theme:hover{color:var(--accent); border-color:var(--accent); background:var(--accent-soft)}
+#theme:focus-visible{outline:2px solid var(--accent); outline-offset:2px; color:var(--accent)}
+#theme svg{width:13px; height:13px; flex:0 0 auto; display:block}
+#theme .lbl{display:inline}
+@media (max-width:560px){
+  #theme{top:10px; right:10px; padding:7px 9px; gap:0}
+  #theme .lbl{display:none}
+}
+@media (prefers-reduced-motion:reduce){ #theme{transition:none} }
+
 /* ---------- shell ---------- */
 .wrap{width:100%; max-width:680px; margin:0 auto; padding:0 24px}
 .wide{max-width:940px}
@@ -308,7 +329,23 @@ nav.rail a:focus-visible{outline:1px solid var(--accent); outline-offset:3px; op
 }
 </style>
 
+<script>
+/* apply the saved view before first paint, so the page never flashes the wrong one */
+(function(){
+  try{
+    var t = localStorage.getItem("rnp-view");
+    if(t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+  }catch(e){}
+})();
+</script>
+
 <div id="bar" aria-hidden="true"></div>
+
+<button id="theme" type="button">
+  <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg>
+  <span class="lbl">Day view</span>
+</button>
 
 <nav class="rail" aria-label="Sections">
   <a href="#problem" class="on">The problem</a>
@@ -479,6 +516,42 @@ nav.rail a:focus-visible{outline:1px solid var(--accent); outline-offset:3px; op
 (function(){
   "use strict";
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- day / night view ---------- */
+  var SUN = '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.4M12 19.2v2.4M4.2 12H1.8M22.2 12h-2.4' +
+            'M6.5 6.5 4.8 4.8M19.2 19.2l-1.7-1.7M17.5 6.5l1.7-1.7M4.8 19.2l1.7-1.7"/>';
+  var MOON = '<path d="M20.5 14.4A8.6 8.6 0 0 1 9.6 3.5a8.6 8.6 0 1 0 10.9 10.9z"/>';
+  var btn = document.getElementById("theme");
+  var icon = document.getElementById("theme-icon");
+  var lbl = btn.querySelector(".lbl");
+  var darkMQ = window.matchMedia("(prefers-color-scheme: dark)");
+
+  function currentView(){
+    var stamped = document.documentElement.getAttribute("data-theme");
+    if(stamped === "light" || stamped === "dark") return stamped;
+    return darkMQ.matches ? "dark" : "light";
+  }
+  /* the control names what it does, not what you are looking at */
+  function paintToggle(){
+    var next = currentView() === "dark" ? "light" : "dark";
+    icon.innerHTML = next === "light" ? SUN : MOON;
+    lbl.textContent = next === "light" ? "Day view" : "Night view";
+    btn.setAttribute("aria-label", "Switch to " + (next === "light" ? "day" : "night") + " view");
+  }
+  paintToggle();
+
+  btn.addEventListener("click", function(){
+    var next = currentView() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try{ localStorage.setItem("rnp-view", next); }catch(e){}
+    paintToggle();
+  });
+  /* follow the OS while the reader has not chosen a view of their own */
+  var onSystemFlip = function(){
+    if(!document.documentElement.hasAttribute("data-theme")) paintToggle();
+  };
+  if(darkMQ.addEventListener) darkMQ.addEventListener("change", onSystemFlip);
+  else if(darkMQ.addListener) darkMQ.addListener(onSystemFlip);
 
   /* ---------- reading progress ---------- */
   var bar = document.getElementById("bar");
