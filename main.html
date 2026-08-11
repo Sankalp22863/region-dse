@@ -113,6 +113,18 @@ body{
 }
 @media (prefers-reduced-motion:reduce){ #theme{transition:none} }
 
+/* ---------- page nav ---------- */
+.pagenav{
+  display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+  padding:22px 0 0;
+  font-family:Mono,ui-monospace,monospace; font-size:11px;
+  letter-spacing:.13em; text-transform:uppercase;
+}
+.pagenav a{color:var(--faint); text-decoration:none; transition:color .2s ease}
+.pagenav a:hover{color:var(--accent)}
+.pagenav a:focus-visible{outline:1px solid var(--accent); outline-offset:3px; color:var(--accent)}
+.pagenav a.here{color:var(--ink); border-bottom:1px solid var(--accent); padding-bottom:2px}
+
 /* ---------- shell ---------- */
 .wrap{width:100%; max-width:680px; margin:0 auto; padding:0 24px}
 .wide{max-width:940px}
@@ -361,7 +373,11 @@ nav.rail a:focus-visible{outline:1px solid var(--accent); outline-offset:3px; op
 
 <header class="masthead">
   <div class="wrap">
-    <p class="eyebrow rv">Nexus Lab &nbsp;·&nbsp; High-level synthesis &nbsp;·&nbsp; Design space exploration</p>
+    <nav class="pagenav">
+      <a href="main.html" class="here">The post</a>
+      <a href="setup.html">Code &amp; setup →</a>
+    </nav>
+    <p class="eyebrow rv" style="margin-top:26px">Nexus Lab &nbsp;·&nbsp; High-level synthesis &nbsp;·&nbsp; Design space exploration</p>
     <h1 class="rv"><span class="quiet">New Era of Exploration</span>Searching Regions,<br>Not Points</h1>
     <p class="deck rv">How we cut hardware design space exploration from hours to minutes by giving up on finding the single best design.</p>
 
@@ -503,7 +519,7 @@ nav.rail a:focus-visible{outline:1px solid var(--accent); outline-offset:3px; op
 
     <footer>
       <span>sankalp naik · Nexus Lab</span>
-      <span>Searching regions, not points</span>
+      <span><a href="setup.html" style="color:inherit; text-decoration:none">Code &amp; setup →</a></span>
     </footer>
   </div>
 </main>
