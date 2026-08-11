@@ -300,18 +300,23 @@ footer{
 
 /* section rail */
 nav.rail{
-  position:fixed; left:26px; top:50%; transform:translateY(-50%); z-index:50;
-  display:none; flex-direction:column; gap:11px;
+  position:fixed; left:18px; top:50%; transform:translateY(-50%); z-index:50;
+  display:none; flex-direction:column; gap:11px; max-width:150px;
 }
-@media (min-width:1440px){nav.rail{display:flex}}
+/* the rail needs margin to live in; below this the reading column takes the whole screen */
+@media (min-width:1180px){nav.rail{display:flex}}
+/* between those widths the rail and the 940px figures would collide, so the figures give way */
+@media (min-width:1180px) and (max-width:1439px){.wrap.wide{max-width:820px}}
 nav.rail a{
   display:flex; align-items:center; gap:9px; text-decoration:none;
   font-family:Mono,ui-monospace,monospace; font-size:10px; letter-spacing:.12em;
   text-transform:uppercase; color:var(--faint); opacity:.5; transition:opacity .3s ease, color .3s ease;
 }
 nav.rail a::before{
-  content:""; width:14px; height:1px; background:currentColor; transition:width .3s ease;
+  content:""; width:14px; height:1px; flex:0 0 auto; background:currentColor; transition:width .3s ease;
 }
+/* label sits on the page ground, so it stays readable even if content creeps under it */
+nav.rail a span{background:var(--paper); padding:1px 4px; border-radius:2px}
 nav.rail a:hover{opacity:1}
 nav.rail a.on{opacity:1; color:var(--accent)}
 nav.rail a.on::before{width:26px}
@@ -348,14 +353,14 @@ nav.rail a:focus-visible{outline:1px solid var(--accent); outline-offset:3px; op
 </button>
 
 <nav class="rail" aria-label="Sections">
-  <a href="#problem" class="on">The problem</a>
-  <a href="#real">The real problem</a>
-  <a href="#observation">The observation</a>
-  <a href="#regions">Regions, not points</a>
-  <a href="#truth">Paying for truth</a>
-  <a href="#results">Results</a>
-  <a href="#deliverable">The deliverable</a>
-  <a href="#limits">What we do not claim</a>
+  <a href="#problem" class="on"><span>The problem</span></a>
+  <a href="#real"><span>The real problem</span></a>
+  <a href="#observation"><span>The observation</span></a>
+  <a href="#regions"><span>Regions, not points</span></a>
+  <a href="#truth"><span>Paying for truth</span></a>
+  <a href="#results"><span>Results</span></a>
+  <a href="#deliverable"><span>The deliverable</span></a>
+  <a href="#limits"><span>What we do not claim</span></a>
 </nav>
 
 <header class="masthead">
