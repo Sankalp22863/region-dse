@@ -26,7 +26,8 @@ INLINE
 
 BLOCKS
 
-  [[TLDR]]                   the grey TL;DR box (the text follows on next lines)
+  [[TLDR]]                   the grey TL;DR box, collapsible, starts OPEN
+  [[TLDR:closed]]            same box, but starts collapsed
   [[FIG:name]]               drops in a figure. Valid names:
                                feasibility  clustering  algorithm  budget
                                latency      walltime    scaling    stentor
@@ -43,3 +44,8 @@ NOTES
   * Figure DATA lives in index.html, in the DATA object near the top of the
     script. Prose lives here; numbers live there.
   * index.html and main.html are the same page; both read these files.
+  * URL flags, handy for screenshots and printing:
+        ?static=1   freeze all animations and count-ups at their final values
+        ?tables=1   open every figure's "Show data" table
+    Animations are also frozen automatically for readers whose system asks for
+    reduced motion.

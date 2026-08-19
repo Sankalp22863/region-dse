@@ -231,6 +231,7 @@
           Target: "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM12 11a1 1 0 1 0 0 2 1 1 0 0 0 0-2z",
           Table: "M3 3h18v18H3zM3 9h18M3 15h18M9 3v18",
           Box: "M21 8l-9-5-9 5v8l9 5 9-5zM3 8l9 5 9-5M12 13v8",
+          ChevronDown: "M6 9l6 6 6-6",
         };
         return (
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -316,7 +317,7 @@
 
       /* Every figure ships a table view — values are never color- or hover-only. */
       const DataTable = ({ head, rows, foot, note }) => (
-        <div className="mt-4 -mx-2 overflow-x-auto">
+        <div className="mt-4 -mx-2 overflow-x-auto" tabIndex="0" role="region" aria-label="Data table">
           <table className="w-full text-xs" style={{ fontVariantNumeric: 'tabular-nums' }}>
             <thead>
               <tr className="text-slate-500 border-b border-slate-200">
@@ -472,7 +473,7 @@
       ];
 
       const ClusteringFigure = () => {
-        const [k, setK] = useState('gemm');
+        const [k, setK] = useState('all');
         const p = PANELS.find(x => x.id === k);
         return (
           <Reveal>{(on) => (
@@ -689,7 +690,7 @@
               ]} />}
               caption={`Post-synthesis cycle counts on the ${d.tier.toLowerCase()} part (${d.part}, ${d.dsp.toLocaleString()} DSP / ${d.lut} LUT). Lower is better; the axis is logarithmic. StreamHLS and both Vitis HLS baselines are in the data table.`}
               table={<DataTable
-                head={['Kernel','PROSE','ScaleHLS-HIDA','AutoDSE','StreamHLS','Vitis full-opt','Vitis no-opt']}
+                head={['Kernel','PROSE','ScaleHLS-HIDA','AutoDSE','StreamHLS','Vitis opt','Vitis none']}
                 rows={KERNELS.map(k => {
                   const r = LAT[dev][k];
                   return [k, r[0].toLocaleString(), r[1].toLocaleString() + (r[6] ? ' †' : ''),
@@ -954,10 +955,11 @@
           if (/^###\s+/.test(s)) { blocks.push({ t:'h3', v:s.replace(/^###\s+/, '') }); i++; continue; }
           if (/^---+$/.test(s)) { blocks.push({ t:'hr' }); i++; continue; }
           if (/^\[\[FIG:/.test(s)) { blocks.push({ t:'fig', v:s.replace(/^\[\[FIG:\s*/, '').replace(/\]\]$/, '').trim() }); i++; continue; }
-          if (/^\[\[TLDR\]\]/i.test(s)) {
+          if (/^\[\[TLDR(:\w+)?\]\]/i.test(s)) {
+            const mode = (/^\[\[TLDR:(\w+)\]\]/i.exec(s) || [])[1];
             i++; const buf = [];
             while (i < lines.length && lines[i].trim() && !/^\[\[/.test(lines[i].trim())) { buf.push(lines[i].trim()); i++; }
-            blocks.push({ t:'tldr', v:buf.join(' ') }); continue;
+            blocks.push({ t:'tldr', v:buf.join(' '), startOpen: String(mode).toLowerCase() !== 'closed' }); continue;
           }
           if (/^\[\[STATS\]\]/i.test(s)) {
             i++; const items = [];
@@ -991,6 +993,43 @@
         return blocks;
       };
 
+      /* TL;DR — click the header to collapse or expand. Default state comes from
+         the section file: [[TLDR]] opens, [[TLDR:closed]] starts collapsed. */
+      const TLDR = ({ text, startOpen = true }) => {
+        const [open, setOpen] = useState(startOpen);
+        const body = useRef(null);
+        const [h, setH] = useState(startOpen ? 'none' : '0px');
+        useEffect(() => {
+          const el = body.current;
+          if (!el) return;
+          const measure = () => setH(open ? el.scrollHeight + 'px' : '0px');
+          measure();
+          if (!open) return;
+          const ro = ('ResizeObserver' in window) ? new ResizeObserver(measure) : null;
+          if (ro) ro.observe(el);
+          return () => ro && ro.disconnect();
+        }, [open, text]);
+        return (
+          <section className="bg-slate-50 rounded-lg mb-10 border border-slate-200 overflow-hidden">
+            <h3>
+              <button type="button" onClick={() => setOpen(v => !v)} aria-expanded={open} aria-controls="tldr-body"
+                className="w-full flex items-center gap-2 px-6 py-4 text-left font-bold text-slate-900 text-sm uppercase tracking-wide hover:bg-slate-100 transition-colors">
+                <Icon name="Terminal" className="w-4 h-4 shrink-0" />
+                <span>TL;DR</span>
+                <Icon name="ChevronDown"
+                  className={`w-4 h-4 ml-auto shrink-0 text-slate-400 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
+              </button>
+            </h3>
+            <div id="tldr-body" style={{ maxHeight: h, transition: STATIC ? 'none' : 'max-height .38s cubic-bezier(.22,.61,.36,1)' }}
+                 className="overflow-hidden">
+              <div ref={body} className="px-6 pb-5 -mt-1">
+                <p className="text-slate-600 text-base leading-relaxed">{inline(text)}</p>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
       const Block = ({ b }) => {
         switch (b.t) {
           case 'h2':  return <SectionHeader title={inline(b.v)} />;
@@ -1004,14 +1043,7 @@
               <p className="text-blue-900 text-lg leading-relaxed">{inline(b.v)}</p>
             </div>
           );
-          case 'tldr': return (
-            <div className="bg-slate-50 p-6 rounded-lg mb-10 border border-slate-200">
-              <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wide mb-2 flex items-center gap-2">
-                <Icon name="Terminal" className="w-4 h-4" /> TL;DR
-              </h3>
-              <p className="text-slate-600 text-base leading-relaxed">{inline(b.v)}</p>
-            </div>
-          );
+          case 'tldr': return <TLDR text={b.v} startOpen={b.startOpen !== false} />;
           case 'stats': return (
             <Reveal>{(on) => (
               <div className="grid sm:grid-cols-2 gap-3 my-8">
