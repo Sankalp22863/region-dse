@@ -906,29 +906,34 @@
          SECTION TEXT PARSER — sections/*.txt  →  React blocks
          See sections/README.txt for the markup this accepts.
          ================================================================== */
-      const inline = (s) => {
+      /* Inline markup. Nests: bold / italic / link contents are parsed again, so
+         **10^8 points** and *see [the paper](url)* both work. `code` is a leaf. */
+      const INLINE_RE = /(`[^`]+`)|(\*\*.+?\*\*)|(\*[^*]+\*)|(\[[^\]]+\]\([^)]+\))|(\d+\^\{[^}]+\}|\d+\^-?[\d.]+)/g;
+
+      const inline = (s, depth = 0) => {
         if (s == null) return null;
         const out = [];
-        const re = /(`[^`]+`)|(\*\*[^*]+\*\*)|(\*[^*]+\*)|(\[[^\]]+\]\([^)]+\))|(\d+\^\{[^}]+\}|\d+\^-?[\d.]+)/g;
+        const re = new RegExp(INLINE_RE.source, 'g');
         let last = 0, m, k = 0;
         const plain = (t) => t.replace(/--/g, '—');
+        const recurse = (t) => (depth < 4 ? inline(t, depth + 1) : plain(t));
         while ((m = re.exec(s)) !== null) {
           if (m.index > last) out.push(plain(s.slice(last, m.index)));
           const tok = m[0];
           if (tok.startsWith('`')) {
             out.push(<code key={k++} className="text-[0.92em] px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">{tok.slice(1, -1)}</code>);
           } else if (tok.startsWith('**')) {
-            out.push(<strong key={k++} className="font-semibold text-slate-900">{plain(tok.slice(2, -2))}</strong>);
+            out.push(<strong key={k++} className="font-semibold text-slate-900">{recurse(tok.slice(2, -2))}</strong>);
           } else if (tok.startsWith('[')) {
             const mm = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(tok);
             const ext = /^https?:/.test(mm[2]);
             out.push(<a key={k++} href={mm[2]} {...(ext ? { target:'_blank', rel:'noopener noreferrer' } : {})}
-                        className="text-blue-600 font-medium hover:text-blue-800 underline decoration-blue-200 hover:decoration-blue-500 underline-offset-2 transition-colors">{plain(mm[1])}</a>);
+                        className="text-blue-600 font-medium hover:text-blue-800 underline decoration-blue-200 hover:decoration-blue-500 underline-offset-2 transition-colors">{recurse(mm[1])}</a>);
           } else if (tok.startsWith('*')) {
-            out.push(<em key={k++}>{plain(tok.slice(1, -1))}</em>);
+            out.push(<em key={k++}>{recurse(tok.slice(1, -1))}</em>);
           } else {
-            const p = tok.split('^');
-            out.push(<span key={k++}>{p[0]}<sup className="text-[0.7em]">{p[1].replace(/[{}]/g, '')}</sup></span>);
+            const parts = tok.split('^');
+            out.push(<span key={k++}>{parts[0]}<sup className="text-[0.7em]">{parts[1].replace(/[{}]/g, '')}</sup></span>);
           }
           last = m.index + tok.length;
         }

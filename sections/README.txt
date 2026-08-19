@@ -24,6 +24,9 @@ INLINE
   10^4          renders as a superscript exponent
   --            renders as an em dash
 
+  These nest, so **10^8 points** and *see [the paper](https://...)* both work.
+  The only exception is `code`, whose contents are left exactly as typed.
+
 BLOCKS
 
   [[TLDR]]                   the grey TL;DR box, collapsible, starts OPEN
