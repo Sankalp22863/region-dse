@@ -1,0 +1,17 @@
+## Acknowledgements
+
+This work was done at the Nexus Lab under the guidance of Prof. Tathagata Srimani, in collaboration with Prof. Kerem Camsari and Kevin at UC Santa Barbara. Thanks to all of them for the conversations that shaped the idea, and for the pushback that kept the claims honest.
+
+The full algorithm, the complete tables, and the artifact will be linked here once the paper clears review.
+
+## References
+
+[[REF]] Ye et al. | ScaleHLS: A New Scalable High-Level Synthesis Framework on MLIR | HPCA 2022 | https://arxiv.org/abs/2107.11673
+[[REF]] Ye, Jun, Chen | HIDA: A Hierarchical Dataflow Compiler for High-Level Synthesis | ASPLOS 2024 | https://dl.acm.org/doi/10.1145/3620665.3640375
+[[REF]] Sohrabizadeh et al. | AutoDSE: Enabling Software Programmers to Design Efficient FPGA Accelerators | TODAES 2022 | https://dl.acm.org/doi/10.1145/3494534
+[[REF]] Basalama & Cong | Stream-HLS: Towards Automatic Dataflow Acceleration | 2025 | https://arxiv.org/abs/2501.09118
+[[REF]] Pouchet | PolyBench/C: The Polyhedral Benchmark Suite | — | https://sourceforge.net/projects/polybench/
+[[REF]] Maurer & Pontil | Empirical Bernstein Bounds and Sample Variance Penalization | COLT 2009 | https://arxiv.org/abs/0907.3740
+[[REF]] Bubeck et al. | X-Armed Bandits | JMLR 2011 | https://www.jmlr.org/papers/v12/bubeck11a.html
+[[REF]] Lattner et al. | MLIR: Scaling Compiler Infrastructure for Domain Specific Computation | CGO 2021 | https://arxiv.org/abs/2002.11054
+[[REF]] AMD Xilinx | Vitis High-Level Synthesis User Guide (UG1399) | 2022 | https://docs.amd.com/r/en-US/ug1399-vitis-hls

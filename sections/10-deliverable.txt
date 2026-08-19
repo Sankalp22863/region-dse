@@ -1,0 +1,7 @@
+## The deliverable is a region
+
+Conventional DSE hands you a configuration. PROSE's output is a **region**: an interval per knob, plus how densely Pareto-optimal designs fill it and how confident we are, exported as portable compiler metadata that survives lowering.
+
+That changes what happens when something goes wrong late. A downstream tool that hits a violation after place-and-route does not restart the search — it re-tunes *inside* the region, and the box absorbs the violation. And when you retarget the same kernel to a tighter part, you step inward within the existing interval instead of re-running the whole exploration.
+
+> A point is an answer. A box is a budget you can spend later.

@@ -1,0 +1,11 @@
+## Regions, not points
+
+So we changed the unit of search. Instead of tracking individual configurations, PROSE tracks **axis-aligned regions**: boxes in knob space, each carrying a constant-size summary — how many configurations it holds, what fraction were feasible, the mean and variance of observed latency, and how many Pareto-optimal designs have been found inside it.
+
+*Constant-size* is the important word. A few dozen boxes stand in for hundreds of millions of points, and memory stays proportional to the number of regions rather than to the evaluation budget.
+
+Each region also carries a confidence interval on its quality, and that interval is what makes the decisions safe.
+
+[[FIG:algorithm]]
+
+Nothing is discarded on a hunch. A region is pruned only when its optimistic bound is dominated by another region's conservative bound — and any region already known to hold a Pareto point is shielded outright.

@@ -1,0 +1,14 @@
+# Section order. One filename per line. Blank lines and #-comments are ignored.
+# Add, remove, or reorder files here — the page renders them in this order.
+01-tldr.txt
+02-problem.txt
+03-gap.txt
+04-clustering.txt
+05-regions.txt
+06-evaluation.txt
+07-results.txt
+08-scaling.txt
+09-hierarchical.txt
+10-deliverable.txt
+11-limits.txt
+12-references.txt

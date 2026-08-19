@@ -1,0 +1,11 @@
+## Good designs cluster
+
+Before designing anything, we exhaustively measured some of these spaces and asked a simpler question: where do the good designs actually live?
+
+They are not scattered. They cluster. Plot the measured Pareto-optimal configurations against the parallelism knobs and they concentrate into a few compact boxes.
+
+[[FIG:clustering]]
+
+There is a reason for this, and it is not an accident of these benchmarks. A good loop order fixes which resource is the bottleneck; once it is fixed, adding parallelism trades latency against area *monotonically*. Monotonic trade-offs produce connected, well-behaved neighborhoods — so the neighbors of a good design tend to be good designs.
+
+Which means a single expensive measurement is not evidence about one point. It is evidence about a whole neighborhood. Point-based search throws that away.

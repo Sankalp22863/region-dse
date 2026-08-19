@@ -1,0 +1,9 @@
+## Beyond one kernel
+
+A deployed model is not one kernel — it is a dataflow graph of tens of subkernels sharing one device. A flat search faces a product space over nodes; independent per-kernel searches return winners with no guarantee they fit on the board *together*.
+
+The same machinery lifts. Deduplicate repeated nodes by kernel type, water-fill the device's MAC budget across the unique kernels *before* searching, and every combination of per-kernel survivors is jointly feasible by construction. Stage 2 then searches one tied space restricted to the per-kernel regions Stage 1 certified.
+
+[[FIG:stentor]]
+
+The gain falls monotonically with layer size, and for the same reason as above: the tied space widens with the unique-kernel count while the Stage-2 budget does not.

@@ -1,0 +1,7 @@
+## How it scales
+
+To separate "the device got tighter" from "the space got bigger," we swept the problem size N of the largest kernel, `3mm`, and re-ran exploration at each size.
+
+[[FIG:scaling]]
+
+Pruning power is size-invariant or better — the space eliminated per unit of budget rises five orders of magnitude from N=2 to N=64. Front quality holds to N=32 and then breaks, and that break is a budget effect, not a method one: the evaluation budget does not scale with the space, so at N=64 it is spent before the front is resolved.

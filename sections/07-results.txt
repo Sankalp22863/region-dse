@@ -1,0 +1,17 @@
+## Results
+
+Eight PolyBench kernels at N=64, three resource-constrained UltraScale+ parts, five external baselines, every latency a post-synthesis cycle count.
+
+[[FIG:latency]]
+
+[[FIG:walltime]]
+
+[[STATS]]
+5.3× | faster to its design | geomean vs ScaleHLS-HIDA, up to ~40×
+~14× | lower best-feasible latency | geomean vs AutoDSE, every kernel and device
+24/24 | designs feasible as reported | vs 10 ScaleHLS-HIDA points that are not
+18 min | geomean search time | vs 96 and 120 min for the point-based tools
+
+Stated honestly: on raw cycle counts alone — ignoring whether the design fits — the analytical baseline still wins **10 of 24** kernel–device pairs, mostly the small kernels where everything fits and feasibility never binds. Nine of those ten are raw-cycle losses on spaces PROSE prunes to a coarse front. The tenth is `3mm`, the largest space, where a budget fixed independently of space size is spent before pruning concentrates.
+
+> The claim is not that we produce the fastest circuit on every input. It is that we produce a competitive circuit that is **always realizable**, and we get there far sooner.

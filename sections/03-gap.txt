@@ -1,0 +1,11 @@
+## The viability–observability gap
+
+Sample efficiency is the obvious difficulty. It is not the interesting one.
+
+The interesting one is a timing mismatch. You commit the knob values at the very *top* of the compilation flow, but whether the resulting design physically fits is only observable at the very *bottom*, after synthesis and place-and-route. Everything in between is estimate. So a tool can search beautifully, converge confidently, report an optimum — and hand you a design that does not fit. Because the knobs were committed at the top, there is no local repair: one late violation invalidates the search and you start over.
+
+This is not hypothetical. We held eight PolyBench kernels fixed and ran a state-of-the-art analytical DSE tool against three FPGA parts spanning a ~5× range in DSP count.
+
+[[FIG:feasibility]]
+
+And here is the detail that surprised us most: the binding resource was usually **not** the DSPs. On 5 of 8 kernels it was LUTs or flip-flops — precisely the resources analytical cost models estimate most coarsely. The tools fail exactly where their models are weakest, and they fail silently.

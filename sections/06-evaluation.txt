@@ -1,0 +1,7 @@
+## Paying for truth only where it matters
+
+Confidence bounds need samples, and synthesis is expensive, so we split the budget. Most evaluations use a cheap analytical model — roughly a hundredth of the cost — whose only job is to shape the bounds and prune the obviously bad regions. The rest are real Vitis HLS runs on the regions that survived, and they are what ground the result in measured reality.
+
+[[FIG:budget]]
+
+Feasibility is then checked on **all four** resource classes, not just the one the analytical model is good at. That is the whole defense against the failure mode above: every design PROSE reports is feasible by construction.

@@ -1,0 +1,9 @@
+## One query buys one point
+
+High-level synthesis lets you write a kernel in C and get a circuit out the other end. What it does not do is decide how that circuit should be *shaped*. That is set by a handful of transformation knobs: how much to unroll each loop, what order to nest them in, how to tile for locality, how to partition arrays so the datapath can actually be fed.
+
+Those knobs interact, and there are many of them. Depending on the kernel, the legal configuration space runs from about 10^4 to 10^8 points. Worse, the space is opaque: the only way to know what a configuration really costs — cycles, DSPs, LUTs, flip-flops, block RAM — is to synthesize it, and that takes minutes to hours per query.
+
+So autotuners face a brutal ratio: an enormous space against a budget of a few hundred measurements. And every existing approach spends that budget the same way — pick a point, measure it, use the result to pick the next.
+
+> **One query buys one point of information.** Nothing is amortized. A neighbor that has already revealed the region as hopeless still costs a fresh evaluation.

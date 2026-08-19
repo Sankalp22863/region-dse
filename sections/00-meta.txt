@@ -1,0 +1,17 @@
+# Page header. "key: value" — everything after the first colon is the value.
+# Edit freely; blank lines and #-comments are ignored.
+
+tag: High-Level Synthesis
+tag: Design Space Exploration
+tag: FPGA
+
+title: Searching Regions,
+title_accent: Not Points
+subtitle: Pareto-optimal HLS designs cluster. So we stopped searching for the best point and started certifying the best neighborhood.
+
+byline: Sankalp Naik · Nexus Lab
+readtime: 7 min read
+date: Aug 19, 2026
+
+# Links in the header row. "link: Label | url | icon"  (icon = Code, FileText, Layers, Cpu)
+link: Code & setup | setup.html | Code

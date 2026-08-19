@@ -1,0 +1,11 @@
+## What we do not claim
+
+**Global optimality.** The bounds make pruning safe with high probability under a specific concentration inequality. The version we actually deploy preserves the *pruning order* rather than the formal coverage constant, and the shield on Pareto-bearing regions does most of the protective work in practice.
+
+The other limits are real too:
+
+- On the largest space we tested (~10^8 configurations) the fixed evaluation budget binds, not the method, and the advantage narrows.
+- Precision is a design-wide constant rather than a searched knob — very likely where the remaining area savings are.
+- Streaming is decided by one global glue knob rather than per edge.
+- Everything here is measured on FPGAs. The region abstraction should transfer to any HLS flow, but the cost model and resource vector would have to be rebuilt for an ASIC target, and power is not yet an objective at all.
+- We deliver the regional handoff as a mechanism and a contract format. We have not yet measured the downstream re-tuning benefit.
