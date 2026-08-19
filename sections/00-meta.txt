@@ -9,7 +9,7 @@ title: Searching Regions,
 title_accent: Not Points
 subtitle: Pareto-optimal HLS designs cluster. So we stopped searching for the best point and started certifying the best neighborhood.
 
-byline: Sankalp Naik · Nexus Lab
+byline: Sankalp Naik adviced by Prof. Tathagata Srimani | Nexus Lab
 readtime: 7 min read
 date: Aug 19, 2026
 

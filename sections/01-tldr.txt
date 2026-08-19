@@ -1,2 +1,2 @@
-[[TLDR]]
+[[TLDR:closed]]
 Hardware design space exploration evaluates one configuration at a time, and each evaluation costs a synthesis run. We show that Pareto-optimal HLS designs **cluster into a few axis-aligned regions**, so one measurement is evidence about a whole neighborhood. **PROSE** searches over regions, prunes provably dominated ones under confidence bounds, and returns a *certified box* rather than a single point. It reaches its design **5.3× faster** than the leading analytical autotuner and **~14×** lower latency than a greedy synthesis-in-the-loop tuner — and every design it reports actually fits the device.
